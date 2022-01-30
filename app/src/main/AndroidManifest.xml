@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyNewsApp">
         <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".DetailArticle"
             android:exported="false" />
         <activity

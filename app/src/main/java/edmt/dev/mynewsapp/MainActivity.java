@@ -1,5 +1,6 @@
 package edmt.dev.mynewsapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 
 import dmax.dialog.SpotsDialog;
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     SpotsDialog dialog;
     SwipeRefreshLayout swipeLayout;
 
+    FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Init Service
         mService = Common.getNewsService();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         //Init View
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
@@ -56,6 +62,41 @@ public class MainActivity extends AppCompatActivity {
 
         loadWebsiteSource(false);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            navigateToLoginPage();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        signOut();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        signOut();
+        navigateToLoginPage();
+    }
+
+    private void signOut() {
+        if (firebaseAuth.getCurrentUser() != null) {
+            firebaseAuth.signOut();
+        }
+    }
+
+    private void navigateToLoginPage() {
+        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
     }
 
     private void loadWebsiteSource(boolean isRefreshed) {
