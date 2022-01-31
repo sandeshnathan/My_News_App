@@ -17,6 +17,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Created by Sandesh on 01/30/2022.
+ * Last updated by Sandesh on 01/30/2022.
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText registerEmailText;
